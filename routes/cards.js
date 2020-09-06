@@ -6,7 +6,7 @@ const cardsFilePath = path.join(__dirname, '../data/cards.json')
 router.get('/cards', (req, res) => {
     fs.readFile(cardsFilePath, { encoding: 'utf8' }, (err, data) => {
         if(!data) {
-            console.log('file is not found');
+            res.status(500).json({message: 'Запрашиваемый файл не найден'});
             return;
         }
         res.send(JSON.parse(data));

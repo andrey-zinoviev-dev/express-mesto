@@ -6,7 +6,7 @@ const usersFilePath = path.join(__dirname, '../data/users.json');
 router.get('/users', (req, res) => {
   fs.readFile(usersFilePath, {encoding: 'utf8'}, (err, data) => {
     if(!data) {
-        console.log('error during loading file');
+        res.status(500).json({ message: 'Запрашиваемый файл не найден' });
         return;
     }
     res.status(200);
@@ -15,9 +15,9 @@ router.get('/users', (req, res) => {
 });
 router.get('/users/:id', (req, res) => {
     fs.readFile(usersFilePath, {encoding: 'utf8'}, (err, data) => {
-        if(!data) {
-            console.log('error during loading file');
-            return;
+      if(!data) {
+        res.status(500).json({ message: 'Запрашиваемый файл не найден' });
+          return;
         }
         res.status(200);
         const usersList = JSON.parse(data);
