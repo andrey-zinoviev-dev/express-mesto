@@ -1,34 +1,17 @@
 const express = require('express');
+const {
+  showUsers, showUser, addUser, updateUser, updateUserAvatar,
+} = require('../controllers/users');
 
 const router = express.Router();
-const fs = require('fs');
-const path = require('path');
+// const fs = require('fs');
+// const path = require('path');
+// const user = require('../models/user');
 
-const usersFilePath = path.join(__dirname, '../data/users.json');
-router.get('/users', (req, res) => {
-  fs.readFile(usersFilePath, { encoding: 'utf8' }, (err, data) => {
-    if (!data) {
-      res.status(500).json({ message: 'Запрашиваемый файл не найден' });
-      return;
-    }
-    res.status(200);
-    res.send(JSON.parse(data));
-  });
-});
-router.get('/users/:id', (req, res) => {
-  fs.readFile(usersFilePath, { encoding: 'utf8' }, (err, data) => {
-    if (!data) {
-      res.status(500).json({ message: 'Запрашиваемый файл не найден' });
-      return;
-    }
-    res.status(200);
-    const usersList = JSON.parse(data);
-    const user = usersList.find((element) => element._id === req.params.id);
-    if (!user) {
-      res.status(404);
-      res.send({ error: 'Нет пользователя с таким id' });
-    }
-    res.send(user);
-  });
-});
+// const usersFilePath = path.join(__dirname, '../data/users.json');
+router.get('/users', showUsers);
+router.get('/users/:userId', showUser);
+router.post('/users', addUser);
+router.patch('/users/me', updateUser);
+router.patch('/users/me/avatar', updateUserAvatar);
 module.exports = router;
