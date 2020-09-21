@@ -10,8 +10,8 @@ const showUsers = (req, res) => {
     });
 };
 const showUser = (req, res) => {
-  const { userId } = req.params.userId;
-  User.find({ userId })
+  const { userId } = req.params;
+  User.findById(userId)
     .then((data) => {
       res.status(200).send(data);
     })
@@ -32,8 +32,7 @@ const addUser = (req, res) => {
 
 const updateUser = (req, res) => {
   const { _id } = req.user;
-  // name: 'Gideon'- пример данных для изменения пользователя
-  User.findOneAndUpdate(_id, { name: 'Gideon' }, { new: true })
+  User.findByIdAndUpdate(_id, req.body, { new: true })
     .then((data) => {
       res.status(200).send(data);
     })
@@ -44,8 +43,8 @@ const updateUser = (req, res) => {
 
 const updateUserAvatar = (req, res) => {
   const { _id } = req.user;
-  const { link } = req.body;
-  User.findOneAndUpdate(_id, { avatar: link }, { new: true })
+  const { avatar } = req.body;
+  User.findByIdAndUpdate(_id, { avatar }, { new: true })
     .then((data) => {
       res.status(200).send(data);
     })
