@@ -1,4 +1,3 @@
-const card = require('../models/card');
 // const card = require('../models/card');
 const Card = require('../models/card');
 
@@ -8,7 +7,7 @@ const showCards = (req, res) => {
     .then((data) => {
       res.status(200).send(data);
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(404).send({ message: 'Карточки не найдены' });
     });
 };
@@ -17,13 +16,13 @@ const createCard = (req, res) => {
   const { name, link } = req.body;
 
   const { _id } = req.user;
-
+  console.log(req.body);
   Card.create({ name, link, owner: _id })
     .then((data) => {
-      res.status(200).send(data);
+      res.status(201).send(data);
     })
-    .catch((err) => {
-      res.status(400).send({ message: 'Введены неверные данные при создании элемента' });
+    .catch(() => {
+      res.status(400).send({ message: 'Переданы некорректные данные' });
     });
 };
 
@@ -33,8 +32,8 @@ const deleteCard = (req, res) => {
     .then((data) => {
       res.status(200).send(data);
     })
-    .catch((err) => {
-      res.status(400).send({ message: 'Неверный адрес карточки' });
+    .catch(() => {
+      res.status(404).send({ message: 'Карточка не найдена' });
     });
 };
 
@@ -45,7 +44,7 @@ const likeCard = (req, res) => {
     .then((data) => {
       res.status(200).send(data);
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(404).send({ message: 'Карточка не найдена' });
     });
 };
@@ -57,7 +56,7 @@ const dislikeCard = (req, res) => {
     .then((data) => {
       res.status(200).send(data);
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(404).send({ message: 'Карточка не найдена' });
     });
 };

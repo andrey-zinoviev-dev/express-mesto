@@ -21,7 +21,10 @@ const errorHandler = (req, res) => {
   });
 };
 
-app.use(bodyParser.urlencoded({ extended: false }));
+//  заменена настройка body-parser, была url-encoded
+//  теперь json
+//  в postman отправляется запрос в формате raw/json
+app.use(bodyParser.json());
 app.use((req, res, next) => {
   req.user = {
     _id: '5f63e4b8cb5b950e2cf76fb2',

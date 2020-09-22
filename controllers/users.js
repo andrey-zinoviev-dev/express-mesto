@@ -5,28 +5,29 @@ const showUsers = (req, res) => {
     .then((data) => {
       res.status(200).send(data);
     })
-    .catch((err) => {
-      res.status(500).send({ message: 'Неполадки с сервером' });
+    .catch(() => {
+      res.status(500).send({ message: 'На сервере произошла ошибка' });
     });
 };
+//  пользователь показывается по :id
 const showUser = (req, res) => {
-  const { userId } = req.params;
-  User.findById(userId)
+  const { id } = req.params;
+  User.findById(id)
     .then((data) => {
       res.status(200).send(data);
     })
-    .catch((err) => {
-      res.status(400).send({ message: 'Переданы некорректные данные' });
+    .catch(() => {
+      res.status(404).send({ message: 'Пользователь не найден' });
     });
 };
 const addUser = (req, res) => {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
     .then((data) => {
-      res.status(200).send(data);
+      res.status(201).send(data);
     })
-    .catch((err) => {
-      res.status(500).send({ message: 'Ошибка при создании пользователя' });
+    .catch(() => {
+      res.status(400).send({ message: 'Переданы некорректные данные' });
     });
 };
 
@@ -36,8 +37,8 @@ const updateUser = (req, res) => {
     .then((data) => {
       res.status(200).send(data);
     })
-    .catch((err) => {
-      res.status(404).send({ message: 'Пользователь не найден' });
+    .catch(() => {
+      res.status(400).send({ message: 'Переданы некорректные данные ' });
     });
 };
 
@@ -48,8 +49,8 @@ const updateUserAvatar = (req, res) => {
     .then((data) => {
       res.status(200).send(data);
     })
-    .catch((err) => {
-      res.status(400).send({ message: 'Неверные данные пользователя или ссылка на аватар' });
+    .catch(() => {
+      res.status(400).send({ message: 'Переданы некорректные данные' });
     });
 };
 

@@ -10,7 +10,7 @@ const router = express.Router();
 
 // const usersFilePath = path.join(__dirname, '../data/users.json');
 router.get('/users', showUsers);
-router.get('/users/:userId', showUser);
+router.get('/users/:id', showUser);
 router.post('/users', addUser);
 router.patch('/users/me', updateUser);
 router.patch('/users/me/avatar', updateUserAvatar);
