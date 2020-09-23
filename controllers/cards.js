@@ -14,9 +14,7 @@ const showCards = (req, res) => {
 
 const createCard = (req, res) => {
   const { name, link } = req.body;
-
   const { _id } = req.user;
-  console.log(req.body);
   Card.create({ name, link, owner: _id })
     .then((data) => {
       res.status(201).send(data);
