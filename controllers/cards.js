@@ -26,13 +26,25 @@ const createCard = (req, res) => {
 
 const deleteCard = (req, res) => {
   const { cardId } = req.params;
-  Card.findByIdAndDelete(cardId)
-    .then((data) => {
-      res.status(200).send(data);
-    })
-    .catch(() => {
-      res.status(404).send({ message: 'Карточка не найдена' });
-    });
+  const { _id } = req.user;
+  Card.findById(cardId)
+  .populate('owner')
+  .then((data) => {
+    const ownerId = data.owner._id.toString();
+    if(ownerId === _id) {
+      return Card.findByIdAndDelete(cardId)
+      .then((card) => {
+        res.status(200).send(card);
+      })
+      .catch(() => {
+        res.status(404).send({ message: 'Карточка не найдена' });
+      })
+    }
+    return res.status(400).send({ message: 'У Вас нет прав для удаления' });
+  })
+  .catch(() => {
+    res.status(404).send({ message: 'Карточка не найдена' });
+  })
 };
 
 const likeCard = (req, res) => {
