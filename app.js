@@ -35,7 +35,7 @@ app.use(bodyParser.json());
 //   next();
 // });
 app.use((req, res) => {
-  res.header('Access-Control-Allow-Origin', 'http://api.dtm.students.nomoreparties.co/');
+  res.header('Access-Control-Allow-Origin', 'http://.dtm.students.nomoreparties.co/');
   next();
 });
 app.post('/signin', login);
