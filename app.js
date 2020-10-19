@@ -7,6 +7,8 @@ const mongoose = require('mongoose');
 const cardsRouter = require('./routes/cards');
 const router = require('./routes/users');
 
+const { login, addUser } = require('./controllers/users');
+const { authentificate } = require('./middlewares/auth');
 const app = express();
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
@@ -25,13 +27,18 @@ const errorHandler = (req, res) => {
 //  теперь json
 //  в postman отправляется запрос в формате raw/json
 app.use(bodyParser.json());
-app.use((req, res, next) => {
-  req.user = {
-    _id: '5f63e4b8cb5b950e2cf76fb2',
-  };
+// app.use((req, res, next) => {
+//   req.user = {
+//     _id: '5f63e4b8cb5b950e2cf76fb2',
+//   };
 
-  next();
-});
+//   next();
+// });
+app.post('/signin', login);
+app.post('/signup', addUser);
+
+app.use(authentificate);
+
 app.use('/', router);
 app.use('/', cardsRouter);
 
