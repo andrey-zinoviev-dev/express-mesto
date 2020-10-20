@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const { celebrate, Joi, errors } = require('celebrate');
 const cardsRouter = require('./routes/cards');
 const router = require('./routes/users');
-
+const cors = require('cors');
 const { login, addUser } = require('./controllers/users');
 const { authentificate } = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -40,14 +40,14 @@ app.use(bodyParser.json());
 
 //   next();
 // });
-app.use((req, res, next) => {
-  const { origin } = req.header;
-  if (allowedCors.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
-  }
-  next();
-});
-
+// app.use((req, res, next) => {
+//   const { origin } = req.header;
+//   if (allowedCors.includes(origin)) {
+//     res.header('Access-Control-Allow-Origin', origin);
+//   }
+//   next();
+// });
+app.use(cors());
 app.use(requestLogger);
 
 app.post('/signin', celebrate({
