@@ -3,12 +3,18 @@ const express = require('express');
 // const path = require('path');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-// const { nextTick } = require('process');
+const { celebrate, Joi, errors } = require('celebrate');
 const cardsRouter = require('./routes/cards');
 const router = require('./routes/users');
 
 const { login, addUser } = require('./controllers/users');
 const { authentificate } = require('./middlewares/auth');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
+const allowedCors = [
+  'http://dtm.students.nomoreparties.co',
+  'http://www.dtm.students.nomoreparties.co',
+  'http://localhost:3000',
+];
 const app = express();
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
@@ -34,12 +40,29 @@ app.use(bodyParser.json());
 
 //   next();
 // });
-app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', 'http://dtm.students.nomoreparties.co');
+app.use((req, res, next) => {
+  const { origin } = req.header;
+  if (allowedCors.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
   next();
 });
-app.post('/signin', login);
-app.post('/signup', addUser);
+
+app.use(requestLogger);
+
+app.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required(),
+  }),
+}), login);
+
+app.post('/signup', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required(),
+  }),
+}), addUser);
 
 app.use(authentificate);
 
@@ -47,6 +70,13 @@ app.use('/', router);
 app.use('/', cardsRouter);
 
 app.use(errorHandler);
+
+app.use(errorLogger);
+
+app.use(errors());
+app.use((err, req, res, next) => {
+  res.status(err.statusCode || 500).send({ message: err.message });
+});
 
 const { PORT = 3000 } = process.env;
 app.listen(PORT, () => {
