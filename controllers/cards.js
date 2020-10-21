@@ -69,11 +69,12 @@ const likeCard = (req, res, next) => {
   const { _id } = req.user;
   const { cardId } = req.params;
   Card.findByIdAndUpdate(cardId, { $addToSet: { likes: _id } }, { new: true })
+    .populate('likes')
     .then((data) => {
       if (!data) {
         throw new NotFountError('Карточка не найдена');
       }
-      res.status(200).send(data);
+      res.status(200).send(data.populate('likes'));
     })
     .catch((err) => {
       next(err);

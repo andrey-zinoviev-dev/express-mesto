@@ -33,9 +33,9 @@ const showUser = (req, res, next) => {
     });
 };
 const addUser = (req, res, next) => {
-  const { name, about, avatar, email, password } = req.body;
+  const { email, password } = req.body;
   bcrypt.hash(password, 10).then((hash) => {
-    User.create({ name, about, avatar, email, password: hash })
+    User.create({ name: 'Владимир', about: 'На массе на сушках', avatar:"https://i.ytimg.com/vi/mgx0q5mEuP8/maxresdefault.jpg", email, password: hash })
     .then((data) => {
       if (!data) {
         throw new UnauthorizedError('Переданы некорректные данные');
@@ -120,6 +120,23 @@ const login = (req, res, next) => {
     // res.status(404).send({ message: 'Пользователь не найден' });
   })
 };
+const getCurrentUser = (req, res, next) => {
+  const { _id } = req.user;
+  if (!_id) {
+    throw new NotFoundError('Пользователь не найден');
+  }
+  User.findById(_id)
+  .then((data) => {
+    if(!data) {
+      throw new NotError('Ошибка сервера');
+    }
+    res.status(200).send(data)
+  })
+  .catch((err) => {
+    next(err);
+  })
+  // return res.status(200).send({ message: _id });
+};
 
 module.exports = {
   showUsers,
@@ -128,4 +145,5 @@ module.exports = {
   updateUser,
   updateUserAvatar,
   login,
+  getCurrentUser,
 };

@@ -1,7 +1,7 @@
 const express = require('express');
 const { celebrate, Joi } = require('celebrate');
 const {
-  showUsers, showUser, updateUser, updateUserAvatar,
+  showUsers, showUser, updateUser, updateUserAvatar, getCurrentUser
 } = require('../controllers/users');
 
 const router = express.Router();
@@ -11,8 +11,9 @@ const router = express.Router();
 
 // const usersFilePath = path.join(__dirname, '../data/users.json');
 router.get('/users', showUsers);
+router.get('/users/me', getCurrentUser);
 router.get('/users/:id', showUser);
-// router.post('/users', addUser);
+
 router.patch('/users/me', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
@@ -24,5 +25,6 @@ router.patch('/users/me/avatar', celebrate({
     avatar: Joi.string().required().regex(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+=]+$/),
   }).unknown(true),
 }), updateUserAvatar);
-// router.post('/login', login);
+
+
 module.exports = router;
