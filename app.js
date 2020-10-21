@@ -1,3 +1,7 @@
+require('dotenv').config();
+if (!process.env.SECRET_KEY) {
+  throw new Error('Не установлена переменная SECRET_KEY');
+}
 const express = require('express');
 
 // const path = require('path');
@@ -10,11 +14,12 @@ const cors = require('cors');
 const { login, addUser } = require('./controllers/users');
 const { authentificate } = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const allowedCors = [
-  'http://dtm.students.nomoreparties.co',
-  'http://www.dtm.students.nomoreparties.co',
-  'http://localhost:3000',
-];
+// const { propfind } = require('./routes/cards');
+// const allowedCors = [
+//   'http://dtm.students.nomoreparties.co',
+//   'http://www.dtm.students.nomoreparties.co',
+//   'http://localhost:3000',
+// ];
 const app = express();
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
@@ -70,8 +75,6 @@ app.use('/', router);
 app.use('/', cardsRouter);
 
 app.use(errorHandler);
-
-app.use(errorLogger);
 
 app.use(errors());
 app.use((err, req, res, next) => {
