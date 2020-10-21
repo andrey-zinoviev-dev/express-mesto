@@ -35,20 +35,27 @@ const showUser = (req, res, next) => {
 const addUser = (req, res, next) => {
   const { email, password } = req.body;
   bcrypt.hash(password, 10).then((hash) => {
-    User.create({ name: 'Владимир', about: 'На массе на сушках', avatar:"https://i.ytimg.com/vi/mgx0q5mEuP8/maxresdefault.jpg", email, password: hash })
-    .then((data) => {
-      if (!data) {
-        throw new UnauthorizedError('Переданы некорректные данные');
-      }
-      res.status(201).send(data);
-    })
+    User.findOne({ email })
+      .then((user) => {
+        if (user) {
+          throw new Error('Пользователь уже существует');
+        }
+        User.create({ name: 'Владимир', about: 'На массе на сушках', avatar:"https://i.ytimg.com/vi/mgx0q5mEuP8/maxresdefault.jpg", email, password: hash })
+        .then((data) => {
+          if (!data) {
+            throw new UnauthorizedError('Переданы некорректные данные');
+          }
+          res.status(201).send(data);
+        })
+        .catch((err) => {
+          next(err);
+        })
+      })
     .catch((err) => {
       next(err);
       // res.status(400).send({ message: 'Переданы некорректные данные' });
     });
-
   })
-  
 };
 
 const updateUser = (req, res, next) => {
