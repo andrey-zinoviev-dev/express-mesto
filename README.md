@@ -12,3 +12,15 @@
 
 `npm run start` — запускает сервер   
 `npm run dev` — запускает сервер с hot-reload
+
+## Доступ к серверу
+### Домен
+[https://scp.students.nomoreparties.space]
+[https://www.scp.students.nomoreparties.space]
+
+### Поддомен
+[https://api.scp.students.nomoreparties.space]
+[https://www.api.scp.students.nomoreparties.space]
+
+### IP-адрес
+[http://178.154.226.41]
