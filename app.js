@@ -74,9 +74,9 @@ app.use(authentificate);
 
 app.use('/', router);
 app.use('/', cardsRouter);
-
-app.use(errorHandler);
 app.use(errorLogger);
+app.use(errorHandler);
+
 app.use(errors());
 app.use((err, req, res) => {
   res.status(err.statusCode || 500).send({ message: err.message });
