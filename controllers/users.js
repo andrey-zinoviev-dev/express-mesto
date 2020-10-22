@@ -121,7 +121,7 @@ const login = (req, res, next) => {
             throw new BadRequestError('Проверьте почту или пароль');
             // return Promise.reject(new Error('Проверьте почту или пароль'));
           }
-          const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY);
+          const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY, { expiresIn: '5d' });
           res.status(200).send({ payload: token });
         });
     })
