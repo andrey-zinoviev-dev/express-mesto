@@ -1,7 +1,7 @@
 const express = require('express');
 const { celebrate, Joi } = require('celebrate');
 const {
-  showUsers, showUser, updateUser, updateUserAvatar, getCurrentUser
+  showUsers, showUser, updateUser, updateUserAvatar, getCurrentUser,
 } = require('../controllers/users');
 
 const router = express.Router();
@@ -25,6 +25,5 @@ router.patch('/users/me/avatar', celebrate({
     avatar: Joi.string().required().regex(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+=]+$/),
   }).unknown(true),
 }), updateUserAvatar);
-
 
 module.exports = router;

@@ -1,4 +1,5 @@
 require('dotenv').config();
+
 if (!process.env.SECRET_KEY) {
   throw new Error('Не установлена переменная SECRET_KEY');
 }
@@ -8,9 +9,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const { celebrate, Joi, errors } = require('celebrate');
+const cors = require('cors');
 const cardsRouter = require('./routes/cards');
 const router = require('./routes/users');
-const cors = require('cors');
 const { login, addUser } = require('./controllers/users');
 const { authentificate } = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -75,9 +76,9 @@ app.use('/', router);
 app.use('/', cardsRouter);
 
 app.use(errorHandler);
-
+app.use(errorLogger);
 app.use(errors());
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   res.status(err.statusCode || 500).send({ message: err.message });
 });
 

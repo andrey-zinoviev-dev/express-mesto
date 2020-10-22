@@ -37,32 +37,32 @@ const deleteCard = (req, res, next) => {
   const { cardId } = req.params;
   const { _id } = req.user;
   Card.findById(cardId)
-  .populate('owner')
-  .then((data) => {
-    if (!data) {
-      throw new NotFountError('Карточка не найдена');
-    }
-    const ownerId = data.owner._id.toString();
-    if(ownerId === _id) {
-      return Card.findByIdAndDelete(cardId)
-      .then((card) => {
-        if(!card) {
-          throw new NotFountError('Карточка не найдена');
-        }
-        res.status(200).send(card);
-      })
-      .catch((err) => {
-        next(err);
-        // res.status(404).send({ message: 'Карточка не найдена' });
-      })
-    }
-    throw new ForbiddenError('У Вас нет прав для удаления');
+    .populate('owner')
+    .then((data) => {
+      if (!data) {
+        throw new NotFountError('Карточка не найдена');
+      }
+      const ownerId = data.owner._id.toString();
+      if (ownerId === _id) {
+        return Card.findByIdAndDelete(cardId)
+          .then((card) => {
+            if (!card) {
+              throw new NotFountError('Карточка не найдена');
+            }
+            res.status(200).send(card);
+          })
+          .catch((err) => {
+            next(err);
+            // res.status(404).send({ message: 'Карточка не найдена' });
+          });
+      }
+      throw new ForbiddenError('У Вас нет прав для удаления');
     // return res.status(400).send({ message: 'У Вас нет прав для удаления' });
-  })
-  .catch((err) => {
-    next(err);
+    })
+    .catch((err) => {
+      next(err);
     // res.status(404).send({ message: 'Карточка не найдена' });
-  })
+    });
 };
 
 const likeCard = (req, res, next) => {
