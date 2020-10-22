@@ -6,7 +6,7 @@ const NotFountError = require('../errors/notFoundError');
 
 const showCards = (req, res, next) => {
   Card.find({})
-    .populate(['owner', 'likes'])
+    .populate(['owner'])
     .then((data) => {
       if (!data) {
         throw new NotFountError('Карточки не найдены');
